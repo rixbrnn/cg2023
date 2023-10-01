@@ -39,6 +39,7 @@ a. Descreva uma possível configuração dos buffers (VBO, VAO e EBO) para
 representá-lo.
 b. Como estes atributos seriam identificados no vertex shader?
 Agora implemente!
+Resposta no commit: `65214ea`
 9. Faça um desenho em um papel quadriculado (pode ser no computador mesmo) e
 reproduza-o utilizando primitivas em OpenGL. Neste exercício você poderá criar mais de um
 VAO e fazer mais de uma chamada de desenho para poder utilizar primitivas diferentes, se
