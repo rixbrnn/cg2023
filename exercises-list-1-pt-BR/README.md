@@ -27,11 +27,11 @@ d. Com as 3 formas de desenho juntas: Resposta no commit `af3d527`
 6. Faça o desenho de um círculo na tela, utilizando a equação paramétrica do círculo para
 gerar os vértices. Resposta no commit `a6426d5`
  Depois disso:
-a) Desenhe um octágono
-b) Desenhe um pentágono
-c) Desenhe um pac-man!
-d) Desenhe uma fatia de pizza
-e) DESAFIO: desenhe uma “estrela”
+a) Desenhe um octágono: Resposta no commit `55b5791`
+b) Desenhe um pentágono: Resposta no commit `bfb07c3`
+c) Desenhe um pac-man!: Resposta no commit `6281c71`
+d) Desenhe uma fatia de pizza: Resposta no commit `db68995`
+e) DESAFIO: desenhe uma “estrela”: Resposta no commit `eb92262`
 7. Desenhe uma espiral, assim:
 UNIVERSIDADE DO VALE DO RIO DOS SINOS
 8. Considerando o seguinte triângulo abaixo, formado pelos vértices P1, P2 e P3,
