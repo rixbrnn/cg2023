@@ -105,25 +105,32 @@ int main()
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
 
-    float radius = 0.5f; // circle radius
+    std::vector<float> starVertices;
+    float starSize = 0.5f;
+    int points = 5;
+    float step = 3.1415926f * 2.0f / points;
 
-    float start_angle = 0.0f;
-    float end_angle = 45.0f * 3.1415926f / 180.0f;
+    starVertices.push_back(0.0f);
+    starVertices.push_back(0.0f);
+    starVertices.push_back(0.0f);
 
-    std::vector<float> pizzaVertices;
-
-    pizzaVertices.push_back(0.0f);
-    pizzaVertices.push_back(0.0f);
-    pizzaVertices.push_back(0.0f);
-
-    for (float theta = start_angle; theta <= end_angle; theta += 0.01f)
+    for (int i = 0; i <= points; i++)
     {
-        float x = radius * cosf(theta);
-        float y = radius * sinf(theta);
+        float angle = i * step - 3.1415926f / 2.0f;
+        float x = cosf(angle) * starSize;
+        float y = sinf(angle) * starSize;
 
-        pizzaVertices.push_back(x);
-        pizzaVertices.push_back(y);
-        pizzaVertices.push_back(0.0f);
+        starVertices.push_back(x);
+        starVertices.push_back(y);
+        starVertices.push_back(0.0f);
+
+        float innerAngle = angle + step / 2.0f;
+        float innerX = 0.5f * cosf(innerAngle) * starSize;
+        float innerY = 0.5f * sinf(innerAngle) * starSize;
+
+        starVertices.push_back(innerX);
+        starVertices.push_back(innerY);
+        starVertices.push_back(0.0f);
     }
 
     unsigned int VBO, VAO;
@@ -133,7 +140,7 @@ int main()
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, pizzaVertices.size() * sizeof(float), &pizzaVertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, starVertices.size() * sizeof(float), &starVertices[0], GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
@@ -148,12 +155,12 @@ int main()
 
         // render
         // ------
-        glClearColor(1.0f, 0.75f, 0.8f, 1.0f);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLE_FAN, 0, pizzaVertices.size() / 3); // Divida por 3 porque cada vértice tem x, y, z
+        glDrawArrays(GL_TRIANGLE_FAN, 0, starVertices.size() / 3);
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
