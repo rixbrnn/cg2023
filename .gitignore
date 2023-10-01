@@ -1,2 +1,11 @@
-app.dSYM/
-app**
+# Ignore the binary executable
+/app
+
+# Ignore the debug symbol directory
+/app.dSYM
+
+# Ignore any dynamically linked libraries
+*.dylib
+
+# Optionally ignore object files if any are generated
+*.o
