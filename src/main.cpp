@@ -105,20 +105,21 @@ int main()
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
 
-    int numSegments = 100; // vertex amount
-    float radius = 0.5f;   // circle radius
-    std::vector<float> circleVertices;
+    float radius = 0.5f; // circle radius
+    int numSegments = 8;
+
+    std::vector<float> octagonVertices;
 
     for (int i = 0; i < numSegments; i++)
     {
-        float theta = 2.0f * 3.1415926f * float(i) / float(numSegments); // get the current angle
+        float theta = 2.0f * 3.1415926f * float(i) / float(numSegments);
 
-        float x = radius * cosf(theta); // calculate the x component
-        float y = radius * sinf(theta); // calculate the y component
+        float x = radius * cosf(theta); // component x
+        float y = radius * sinf(theta); // component y
 
-        circleVertices.push_back(x);
-        circleVertices.push_back(y);
-        circleVertices.push_back(0.0f); // z component
+        octagonVertices.push_back(x);
+        octagonVertices.push_back(y);
+        octagonVertices.push_back(0.0f); // componenent z
     }
 
     unsigned int VBO, VAO;
@@ -128,7 +129,7 @@ int main()
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, circleVertices.size() * sizeof(float), &circleVertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, octagonVertices.size() * sizeof(float), &octagonVertices[0], GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
