@@ -106,7 +106,7 @@ int main()
     // ------------------------------------------------------------------
 
     float radius = 0.5f; // circle radius
-    int numSegments = 8;
+    int numSegments = 5;
 
     std::vector<float> octagonVertices;
 
