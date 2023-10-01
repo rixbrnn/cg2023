@@ -20,10 +20,10 @@ Na prática, quando vamos desenhar algo com OpenGL, a gente primeiro cria um VBO
 4. Analise o código fonte do projeto Hello Triangle. Localize e relacione os conceitos de
 shaders, VBOs e VAO apresentados até então. Não precisa entregar nada neste exercício.
 5. Faça o desenho de 2 triângulos na tela. Desenhe eles:
-a. Apenas com o polígono preenchido
-b. Apenas com contorno
-c. Apenas como pontos
-d. Com as 3 formas de desenho juntas
+a. Apenas com o polígono preenchido: Resposta no commit `ee593dd`
+b. Apenas com contorno: Resposta no commit `a7ae874`
+c. Apenas como pontos: Resposta no commit `95ebb3a`
+d. Com as 3 formas de desenho juntas: Resposta no commit `af3d527`
 6. Faça o desenho de um círculo na tela, utilizando a equação paramétrica do círculo para
 gerar os vértices. Depois disso:
 a) Desenhe um octágono

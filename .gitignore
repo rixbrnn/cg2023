@@ -1,5 +1,6 @@
 # Ignore the binary executable
 /app
+app
 
 # Ignore the debug symbol directory
 /app.dSYM

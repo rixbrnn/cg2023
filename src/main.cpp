@@ -105,45 +105,33 @@ int main()
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
 
-    float vertices[] = {
-        -0.5f, -0.5f, 0.0f, // bottom left of the first triangle
-        0.0f, -0.5f, 0.0f,  // bottom right of the first triangle & bottom left of the second triangle
-        -0.25f, 0.0f, 0.0f, // top of the first triangle
+    int numSegments = 100; // vertex amount
+    float radius = 0.5f;   // circle radius
+    std::vector<float> circleVertices;
 
-        0.5f, -0.5f, 0.0f, // bottom right of the second triangle
-        0.25f, 0.0f, 0.0f  // top of the second triangle
-    };
+    for (int i = 0; i < numSegments; i++)
+    {
+        float theta = 2.0f * 3.1415926f * float(i) / float(numSegments); // get the current angle
 
-    unsigned int indices[] = {
-        // note that we start from 0!
-        0, 1, 2, // first triangle
-        1, 3, 4  // second triangle
-    };
+        float x = radius * cosf(theta); // calculate the x component
+        float y = radius * sinf(theta); // calculate the y component
 
-    unsigned int EBO;
-    glGenBuffers(1, &EBO);
+        circleVertices.push_back(x);
+        circleVertices.push_back(y);
+        circleVertices.push_back(0.0f); // z component
+    }
 
     unsigned int VBO, VAO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
 
-    // 1. bind Vertex Array Object
     glBindVertexArray(VAO);
 
-    // 2. copy our vertices array in a vertex buffer for OpenGL to use
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, circleVertices.size() * sizeof(float), &circleVertices[0], GL_STATIC_DRAW);
 
-    // 3. copy our index array in a element buffer for OpenGL to use
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    // 4. then set the vertex attributes pointers
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
-
-    // uncomment this call to draw in wireframe polygons.
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // render loop
     // -----------
@@ -160,24 +148,7 @@ int main()
 
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
-
-        // draw as filled
-        int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
-        glUniform4f(vertexColorLocation, 1.0f, 0.0f, 0.0f, 1.0f); // red
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-        // draw as line
-        glUniform4f(vertexColorLocation, 0.0f, 1.0f, 0.0f, 1.0f); // green
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        glLineWidth(5.0f); // Set line width. Note that not all widths might be supported.
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-        // set point size and draw as point
-        glUniform4f(vertexColorLocation, 0.0f, 0.0f, 1.0f, 1.0f); // blue
-        glPointSize(10.0f);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, numSegments);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
