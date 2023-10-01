@@ -105,32 +105,28 @@ int main()
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
 
-    std::vector<float> starVertices;
-    float starSize = 0.5f;
-    int points = 5;
-    float step = 3.1415926f * 2.0f / points;
+    std::vector<float> spiralVertices;
+    float radius = 0.01f;
+    float angle = 0.0f;
+    float angleIncrement = M_PI / 30.0f;
 
-    starVertices.push_back(0.0f);
-    starVertices.push_back(0.0f);
-    starVertices.push_back(0.0f);
+    int revolutions = 10;
+    int verticesPerRevolution = 360;
 
-    for (int i = 0; i <= points; i++)
+    float radiusIncrement = 0.001f;
+    angleIncrement = M_PI / 180.0f;
+
+    for (int i = 0; i < revolutions * verticesPerRevolution; ++i)
     {
-        float angle = i * step - 3.1415926f / 2.0f;
-        float x = cosf(angle) * starSize;
-        float y = sinf(angle) * starSize;
+        float x = cosf(angle) * radius;
+        float y = sinf(angle) * radius;
 
-        starVertices.push_back(x);
-        starVertices.push_back(y);
-        starVertices.push_back(0.0f);
+        spiralVertices.push_back(x);
+        spiralVertices.push_back(y);
+        spiralVertices.push_back(0.0f);
 
-        float innerAngle = angle + step / 2.0f;
-        float innerX = 0.5f * cosf(innerAngle) * starSize;
-        float innerY = 0.5f * sinf(innerAngle) * starSize;
-
-        starVertices.push_back(innerX);
-        starVertices.push_back(innerY);
-        starVertices.push_back(0.0f);
+        angle += angleIncrement;
+        radius += radiusIncrement;
     }
 
     unsigned int VBO, VAO;
@@ -140,11 +136,13 @@ int main()
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, starVertices.size() * sizeof(float), &starVertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, spiralVertices.size() * sizeof(float), &spiralVertices[0], GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
 
+    // render loop
+    // -----------
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -155,12 +153,16 @@ int main()
 
         // render
         // ------
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Black background
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
+        int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+        glUniform4f(vertexColorLocation, 1.0f, 1.0f, 1.0f, 1.0f); // White spiral
+
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLE_FAN, 0, starVertices.size() / 3);
+        glDrawArrays(GL_LINE_STRIP, 0, spiralVertices.size() / 3); // Correct draw mode for spiral
+
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
