@@ -9,3 +9,6 @@
 
 # Optionally ignore object files if any are generated
 *.o
+
+# Visual Studio Code
+.vscode/
