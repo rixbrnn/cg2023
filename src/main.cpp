@@ -16,11 +16,13 @@ const char *vertexShaderSource = "#version 330 core\n"
                                  "{\n"
                                  "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
                                  "}\0";
+
 const char *fragmentShaderSource = "#version 330 core\n"
                                    "out vec4 FragColor;\n"
+                                   "uniform vec4 ourColor;\n"
                                    "void main()\n"
                                    "{\n"
-                                   "   FragColor = vec4(1.0f, 0.1f, 0.9f, 1.0f);\n"
+                                   "   FragColor = ourColor;\n"
                                    "}\n\0";
 
 int main()
@@ -156,14 +158,26 @@ int main()
         glClearColor(1.0f, 0.75f, 0.8f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // draw our first triangle
         glUseProgram(shaderProgram);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-        glPointSize(10.0f);
-        glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+        glBindVertexArray(VAO);
+
+        // draw as filled
+        int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+        glUniform4f(vertexColorLocation, 1.0f, 0.0f, 0.0f, 1.0f); // red
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        glBindVertexArray(0);
-        // glBindVertexArray(0); // no need to unbind it every time
+
+        // draw as line
+        glUniform4f(vertexColorLocation, 0.0f, 1.0f, 0.0f, 1.0f); // green
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        glLineWidth(5.0f); // Set line width. Note that not all widths might be supported.
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        // set point size and draw as point
+        glUniform4f(vertexColorLocation, 0.0f, 0.0f, 1.0f, 1.0f); // blue
+        glPointSize(10.0f);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
