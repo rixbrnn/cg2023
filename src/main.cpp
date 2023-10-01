@@ -104,16 +104,18 @@ int main()
     // ------------------------------------------------------------------
 
     float vertices[] = {
-        0.5f, 0.5f, 0.0f,   // top right
-        0.5f, -0.5f, 0.0f,  // bottom right
-        -0.5f, -0.5f, 0.0f, // bottom left
-        -0.5f, 0.5f, 0.0f   // top left
+        -0.5f, -0.5f, 0.0f, // bottom left of the first triangle
+        0.0f, -0.5f, 0.0f,  // bottom right of the first triangle & bottom left of the second triangle
+        -0.25f, 0.0f, 0.0f, // top of the first triangle
+
+        0.5f, -0.5f, 0.0f, // bottom right of the second triangle
+        0.25f, 0.0f, 0.0f  // top of the second triangle
     };
 
     unsigned int indices[] = {
         // note that we start from 0!
-        0, 1, 3, // first triangle
-        1, 2, 3  // second triangle
+        0, 1, 2, // first triangle
+        1, 3, 4  // second triangle
     };
 
     unsigned int EBO;
@@ -157,7 +159,6 @@ int main()
         // draw our first triangle
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
         // glBindVertexArray(0); // no need to unbind it every time
