@@ -106,22 +106,25 @@ int main()
     // ------------------------------------------------------------------
 
     float radius = 0.5f; // circle radius
-    int numSegments = 5;
 
-    std::vector<float> octagonVertices;
+    float start_angle = 22.5f * 3.1415926f / 180.0f;
+    float end_angle = (360.0f - 22.5f) * 3.1415926f / 180.0f;
 
-    for (int i = 0; i < numSegments; i++)
+    std::vector<float> pacmanVertices;
+
+    pacmanVertices.push_back(0.0f);
+    pacmanVertices.push_back(0.0f);
+    pacmanVertices.push_back(0.0f);
+
+    for (float theta = start_angle; theta <= end_angle; theta += 0.01f)
     {
-        float theta = 2.0f * 3.1415926f * float(i) / float(numSegments);
+        float x = radius * cosf(theta);
+        float y = radius * sinf(theta);
 
-        float x = radius * cosf(theta); // component x
-        float y = radius * sinf(theta); // component y
-
-        octagonVertices.push_back(x);
-        octagonVertices.push_back(y);
-        octagonVertices.push_back(0.0f); // componenent z
+        pacmanVertices.push_back(x);
+        pacmanVertices.push_back(y);
+        pacmanVertices.push_back(0.0f);
     }
-
     unsigned int VBO, VAO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -129,7 +132,7 @@ int main()
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, octagonVertices.size() * sizeof(float), &octagonVertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, pacmanVertices.size() * sizeof(float), &pacmanVertices[0], GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
@@ -149,7 +152,7 @@ int main()
 
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLE_FAN, 0, numSegments);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, pacmanVertices.size() / 3); // Divida por 3 porque cada vértice tem x, y, z
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
