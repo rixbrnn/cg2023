@@ -25,7 +25,8 @@ b. Apenas com contorno: Resposta no commit `a7ae874`
 c. Apenas como pontos: Resposta no commit `95ebb3a`
 d. Com as 3 formas de desenho juntas: Resposta no commit `af3d527`
 6. Faça o desenho de um círculo na tela, utilizando a equação paramétrica do círculo para
-gerar os vértices. Depois disso:
+gerar os vértices. Resposta no commit `a6426d5`
+ Depois disso:
 a) Desenhe um octágono
 b) Desenhe um pentágono
 c) Desenhe um pac-man!
