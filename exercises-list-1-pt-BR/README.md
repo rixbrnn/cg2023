@@ -32,8 +32,7 @@ b) Desenhe um pentágono: Resposta no commit `bfb07c3`
 c) Desenhe um pac-man!: Resposta no commit `6281c71`
 d) Desenhe uma fatia de pizza: Resposta no commit `db68995`
 e) DESAFIO: desenhe uma “estrela”: Resposta no commit `eb92262`
-7. Desenhe uma espiral, assim:
-UNIVERSIDADE DO VALE DO RIO DOS SINOS
+7. Desenhe uma espiral: Resposata no commit `15e5d71`
 8. Considerando o seguinte triângulo abaixo, formado pelos vértices P1, P2 e P3,
 respectivamente com as cores vermelho, verde e azul.
 a. Descreva uma possível configuração dos buffers (VBO, VAO e EBO) para
@@ -44,6 +43,6 @@ Agora implemente!
 reproduza-o utilizando primitivas em OpenGL. Neste exercício você poderá criar mais de um
 VAO e fazer mais de uma chamada de desenho para poder utilizar primitivas diferentes, se
 necessário.
-10. Implemente (pode pegar do tutorial) uma classe para tratar os shaders a partir de
+10.  Implemente (pode pegar do tutorial) uma classe para tratar os shaders a partir de
 arquivos. FEITO EM AULA E ATUALIZADO O REPOSITÓRIO!
 Entrega individual via Moodle (consulte a data de entrega no sistema)
