@@ -1,5 +1,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
 
@@ -12,9 +15,10 @@ const unsigned int SCR_HEIGHT = 600;
 
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
+                                 "uniform mat4 transform;\n"
                                  "void main()\n"
                                  "{\n"
-                                 "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+                                 "    gl_Position = transform * vec4(aPos.x, aPos.y, aPos.z, 1.0);"
                                  "}\0";
 
 const char *fragmentShaderSource = "#version 330 core\n"
@@ -105,29 +109,11 @@ int main()
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
 
-    std::vector<float> spiralVertices;
-    float radius = 0.01f;
-    float angle = 0.0f;
-    float angleIncrement = M_PI / 30.0f;
-
-    int revolutions = 10;
-    int verticesPerRevolution = 360;
-
-    float radiusIncrement = 0.001f;
-    angleIncrement = M_PI / 180.0f;
-
-    for (int i = 0; i < revolutions * verticesPerRevolution; ++i)
-    {
-        float x = cosf(angle) * radius;
-        float y = sinf(angle) * radius;
-
-        spiralVertices.push_back(x);
-        spiralVertices.push_back(y);
-        spiralVertices.push_back(0.0f);
-
-        angle += angleIncrement;
-        radius += radiusIncrement;
-    }
+    float vertices[] = {
+        -0.5f, -0.5f * static_cast<float>(sqrt(3)) / 2, 0.0f, // Inferior esquerdo
+        0.5f, -0.5f * static_cast<float>(sqrt(3)) / 2, 0.0f,  // Inferior direito
+        0.0f, 0.5f * static_cast<float>(sqrt(3)) / 2, 0.0f    // Topo
+    };
 
     unsigned int VBO, VAO;
     glGenVertexArrays(1, &VAO);
@@ -136,7 +122,7 @@ int main()
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, spiralVertices.size() * sizeof(float), &spiralVertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
@@ -145,6 +131,10 @@ int main()
     // -----------
     // render loop
     // -----------
+
+    // right before entering the main loop
+    float accumulatedRotation = 0.0f; // Initialized to zero
+
     while (!glfwWindowShouldClose(window))
     {
         // input
@@ -160,8 +150,19 @@ int main()
         int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
         glUniform4f(vertexColorLocation, 1.0f, 1.0f, 1.0f, 1.0f); // White spiral
 
+        // Draw the triangle
         glBindVertexArray(VAO);
-        glDrawArrays(GL_LINE_STRIP, 0, spiralVertices.size() / 3); // Correct draw mode for spiral
+
+        // Pass the transformation matrix to the shader
+
+        accumulatedRotation += 0.1f;       // Increment rotation in each frame
+        glm::mat4 trans = glm::mat4(1.0f); // 'trans' is declared here
+        trans = glm::rotate(trans, glm::radians(accumulatedRotation), glm::vec3(0.0f, 0.0f, 1.0f));
+
+        unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+
+        glDrawArrays(GL_TRIANGLES, 0, 3); // Drawing the triangle
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
