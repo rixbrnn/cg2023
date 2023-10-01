@@ -107,24 +107,25 @@ int main()
 
     float radius = 0.5f; // circle radius
 
-    float start_angle = 22.5f * 3.1415926f / 180.0f;
-    float end_angle = (360.0f - 22.5f) * 3.1415926f / 180.0f;
+    float start_angle = 0.0f;
+    float end_angle = 45.0f * 3.1415926f / 180.0f;
 
-    std::vector<float> pacmanVertices;
+    std::vector<float> pizzaVertices;
 
-    pacmanVertices.push_back(0.0f);
-    pacmanVertices.push_back(0.0f);
-    pacmanVertices.push_back(0.0f);
+    pizzaVertices.push_back(0.0f);
+    pizzaVertices.push_back(0.0f);
+    pizzaVertices.push_back(0.0f);
 
     for (float theta = start_angle; theta <= end_angle; theta += 0.01f)
     {
         float x = radius * cosf(theta);
         float y = radius * sinf(theta);
 
-        pacmanVertices.push_back(x);
-        pacmanVertices.push_back(y);
-        pacmanVertices.push_back(0.0f);
+        pizzaVertices.push_back(x);
+        pizzaVertices.push_back(y);
+        pizzaVertices.push_back(0.0f);
     }
+
     unsigned int VBO, VAO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -132,7 +133,7 @@ int main()
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, pacmanVertices.size() * sizeof(float), &pacmanVertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, pizzaVertices.size() * sizeof(float), &pizzaVertices[0], GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
@@ -152,8 +153,7 @@ int main()
 
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLE_FAN, 0, pacmanVertices.size() / 3); // Divida por 3 porque cada vértice tem x, y, z
-
+        glDrawArrays(GL_TRIANGLE_FAN, 0, pizzaVertices.size() / 3); // Divida por 3 porque cada vértice tem x, y, z
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
