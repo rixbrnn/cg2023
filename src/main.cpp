@@ -158,9 +158,21 @@ int main()
         int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
         glUniform4f(vertexColorLocation, 1.0f, 1.0f, 1.0f, 1.0f); // White triangle
 
-        // Draw the triangle
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3); // Drawing the triangle
+        // upper left
+        glViewport(0, SCR_HEIGHT / 2, SCR_WIDTH / 2, SCR_HEIGHT / 2);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        // upper right
+        glViewport(SCR_WIDTH / 2, SCR_HEIGHT / 2, SCR_WIDTH / 2, SCR_HEIGHT / 2);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        // bottom left
+        glViewport(0, 0, SCR_WIDTH / 2, SCR_HEIGHT / 2);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        // bottom right
+        glViewport(SCR_WIDTH / 2, 0, SCR_WIDTH / 2, SCR_HEIGHT / 2);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
