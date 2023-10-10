@@ -127,55 +127,58 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
 
-    // render loop
-    // -----------
+    // Red Triangle
+    glm::mat4 transform1 = glm::mat4(1.0f);
+    transform1 = glm::translate(transform1, glm::vec3(-1.0f, 0.0f, 0.0f));
+    transform1 = glm::rotate(transform1, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f)); // Rotating it by 45 degrees
+
+    //  Green Triangle
+    glm::mat4 transform2 = glm::mat4(1.0f);
+    transform2[1][0] = 0.5f;
+
+    //  Blue Triangle
+    glm::mat4 transform3 = glm::mat4(1.0f);
+    transform3 = glm::translate(transform3, glm::vec3(1.0f, 0.0f, 0.0f));
+    transform3 = glm::scale(transform3, glm::vec3(0.5f, 1.5f, 1.0f));
+
     // render loop
     // -----------
 
     // right before entering the main loop
-
     glm::mat4 projection = glm::ortho(0.0f, 800.0f, 600.0f, 0.0f, -1.0f, 1.0f);
-
     while (!glfwWindowShouldClose(window))
     {
-
-        glViewport(SCR_WIDTH / 2, SCR_HEIGHT / 2, SCR_WIDTH / 2, SCR_HEIGHT / 2);
-
         // input
-        // -----
         processInput(window);
 
         // render
-        // ------
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Black background
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
 
         unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
         int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
-        glUniform4f(vertexColorLocation, 1.0f, 1.0f, 1.0f, 1.0f); // White triangle
 
-        // upper left
-        glViewport(0, SCR_HEIGHT / 2, SCR_WIDTH / 2, SCR_HEIGHT / 2);
+        glm::mat4 mvp3 = projection * transform3;
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(mvp3));
+        glUniform4f(vertexColorLocation, 0.0f, 0.0f, 1.0f, 1.0f);
+        glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
-        // upper right
-        glViewport(SCR_WIDTH / 2, SCR_HEIGHT / 2, SCR_WIDTH / 2, SCR_HEIGHT / 2);
+        glm::mat4 mvp2 = projection * transform2;
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(mvp2));
+        glUniform4f(vertexColorLocation, 0.0f, 1.0f, 0.0f, 1.0f);
+        glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
-        // bottom left
-        glViewport(0, 0, SCR_WIDTH / 2, SCR_HEIGHT / 2);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-
-        // bottom right
-        glViewport(SCR_WIDTH / 2, 0, SCR_WIDTH / 2, SCR_HEIGHT / 2);
+        glm::mat4 mvp = projection * transform1;
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(mvp));
+        glUniform4f(vertexColorLocation, 1.0f, 0.0f, 0.0f, 1.0f);
+        glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
