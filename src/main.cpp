@@ -110,9 +110,9 @@ int main()
     // ------------------------------------------------------------------
 
     float vertices[] = {
-        -0.5f, -0.5f * static_cast<float>(sqrt(3)) / 2, 0.0f, // Inferior esquerdo
-        0.5f, -0.5f * static_cast<float>(sqrt(3)) / 2, 0.0f,  // Inferior direito
-        0.0f, 0.5f * static_cast<float>(sqrt(3)) / 2, 0.0f    // Topo
+        400.0f - 250.0f, 300.0f - 250.0f * static_cast<float>(sqrt(3)) / 2, 0.0f, // Inferior esquerdo
+        400.0f + 250.0f, 300.0f - 250.0f * static_cast<float>(sqrt(3)) / 2, 0.0f, // Inferior direito
+        400.0f, 300.0f + 250.0f * static_cast<float>(sqrt(3)) / 2, 0.0f           // Topo
     };
 
     unsigned int VBO, VAO;
@@ -134,7 +134,7 @@ int main()
 
     // right before entering the main loop
 
-    glm::mat4 projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, -1.0f, 1.0f);
+    glm::mat4 projection = glm::ortho(0.0f, 800.0f, 600.0f, 0.0f, -1.0f, 1.0f);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -142,21 +142,21 @@ int main()
         // -----
         processInput(window);
 
-        unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
         // render
         // ------
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Black background
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
+
+        unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
         int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
-        glUniform4f(vertexColorLocation, 1.0f, 1.0f, 1.0f, 1.0f); // White spiral
+        glUniform4f(vertexColorLocation, 1.0f, 1.0f, 1.0f, 1.0f); // White triangle
 
         // Draw the triangle
         glBindVertexArray(VAO);
-
         glDrawArrays(GL_TRIANGLES, 0, 3); // Drawing the triangle
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
