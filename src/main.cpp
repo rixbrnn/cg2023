@@ -133,13 +133,17 @@ int main()
     // -----------
 
     // right before entering the main loop
-    float accumulatedRotation = 0.0f; // Initialized to zero
+
+    glm::mat4 projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, -1.0f, 1.0f);
 
     while (!glfwWindowShouldClose(window))
     {
         // input
         // -----
         processInput(window);
+
+        unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
         // render
         // ------
@@ -152,15 +156,6 @@ int main()
 
         // Draw the triangle
         glBindVertexArray(VAO);
-
-        // Pass the transformation matrix to the shader
-
-        accumulatedRotation += 0.1f;       // Increment rotation in each frame
-        glm::mat4 trans = glm::mat4(1.0f); // 'trans' is declared here
-        trans = glm::rotate(trans, glm::radians(accumulatedRotation), glm::vec3(0.0f, 0.0f, 1.0f));
-
-        unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
         glDrawArrays(GL_TRIANGLES, 0, 3); // Drawing the triangle
 
