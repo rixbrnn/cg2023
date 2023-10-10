@@ -138,6 +138,9 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
+
+        glViewport(SCR_WIDTH / 2, SCR_HEIGHT / 2, SCR_WIDTH / 2, SCR_HEIGHT / 2);
+
         // input
         // -----
         processInput(window);
